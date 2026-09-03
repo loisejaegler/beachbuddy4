@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Beach Buddy — Accès plage assisté</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-deep:#0F3D63;
+    --blue-mid:#1B5A8C;
+    --sky:#EAF4F8;
+    --sand:#E8935C;
+    --sand-light:#F6D9BE;
+    --ink:#12283A;
+    --white:#FFFFFF;
+    --line: rgba(15,61,99,0.14);
+    --radius: 22px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--sky);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{
+    font-family:'Space Grotesk','Inter',sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .arabic{
+    font-family:'Inter',system-ui,sans-serif;
+    direction:rtl;
+    unicode-bidi:isolate;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+    color:var(--white);
+    padding:44px 22px 74px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.28);
+    border-radius:999px;
+    padding:6px 14px;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:22px;
+  }
+  .hero-badge svg{width:16px;height:16px;flex-shrink:0;}
+  .hero h1{
+    font-size:clamp(32px,8vw,44px);
+    line-height:1.08;
+    max-width:11ch;
+  }
+  .hero .sub{
+    margin-top:14px;
+    font-size:17px;
+    color:rgba(255,255,255,0.86);
+    max-width:34ch;
+  }
+  .hero .sub-ar{
+    margin-top:6px;
+    font-size:16px;
+    color:rgba(255,255,255,0.72);
+    max-width:34ch;
+  }
+  .hero-cta{
+    margin-top:30px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--sand);
+    color:var(--blue-deep);
+    font-weight:700;
+    font-size:17px;
+    padding:16px 26px;
+    border-radius:16px;
+    border:none;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(232,147,92,0.35);
+  }
+  .hero-cta svg{width:20px;height:20px;}
+
+  .wave{
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    line-height:0;
+  }
+  .wave svg{width:100%;height:56px;display:block;}
+
+  /* ---------- STEPS ---------- */
+  .steps{
+    max-width:520px;
+    margin:0 auto;
+    padding:0 20px 8px;
+  }
+  .steps-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:-46px;
+    position:relative;
+    z-index:2;
+  }
+  .step-card{
+    background:var(--white);
+    border-radius:16px;
+    padding:16px 10px 14px;
+    text-align:center;
+    box-shadow:0 6px 18px rgba(15,61,99,0.10);
+  }
+  .step-num{
+    width:26px;height:26px;
+    border-radius:50%;
+    background:var(--sky);
+    color:var(--blue-deep);
+    font-weight:700;
+    font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 8px;
+  }
+  .step-card p{
+    margin:0;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink);
+  }
+
+  /* ---------- FORM SECTION ---------- */
+  .wrap{max-width:520px;margin:0 auto;padding:40px 20px 60px;}
+  .section-title{
+    font-size:22px;
+    margin-bottom:4px;
+  }
+  .section-hint{
+    color:#4A6478;
+    font-size:14.5px;
+    margin-bottom:26px;
+  }
+
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;
+    font-weight:600;
+    font-size:14.5px;
+    margin-bottom:9px;
+    color:var(--blue-deep);
+  }
+  .field .label-ar{
+    font-weight:500;
+    font-size:13.5px;
+    color:#5A7185;
+    margin-bottom:9px;
+    margin-top:-6px;
+  }
+
+  select{
+    width:100%;
+    padding:15px 14px;
+    border-radius:14px;
+    border:1.5px solid var(--line);
+    background:var(--white);
+    font-size:16px;
+    color:var(--ink);
+    appearance:none;
+    background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%230F3D63' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 16px center;
+  }
+  select:focus{outline:3px solid rgba(27,90,140,0.35);outline-offset:1px;}
+
+  .choice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .choice{
+    position:relative;
+  }
+  .choice input{
+    position:absolute;
+    opacity:0;
+    width:100%;height:100%;
+    cursor:pointer;
+    margin:0;
+  }
+  .choice .box{
+    border:1.5px solid var(--line);
+    background:var(--white);
+    border-radius:14px;
+    padding:16px 12px;
+    text-align:center;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    transition:border-color .15s, background .15s;
+  }
+  .choice .box .icon{font-size:22px;display:block;margin-bottom:6px;}
+  .choice input:checked + .box{
+    border-color:var(--blue-mid);
+    background:var(--sky);
+    color:var(--blue-deep);
+  }
+  .choice input:focus-visible + .box{outline:3px solid rgba(27,90,140,0.35);outline-offset:1px;}
+
+  textarea{
+    width:100%;
+    padding:14px;
+    border-radius:14px;
+    border:1.5px solid var(--line);
+    font-size:16px;
+    font-family:inherit;
+    resize:vertical;
+    min-height:70px;
+    color:var(--ink);
+  }
+  textarea:focus{outline:3px solid rgba(27,90,140,0.35);outline-offset:1px;}
+
+  .submit-btn{
+    width:100%;
+    background:var(--blue-deep);
+    color:var(--white);
+    border:none;
+    border-radius:16px;
+    padding:18px;
+    font-size:16.5px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    cursor:pointer;
+    margin-top:8px;
+  }
+  .submit-btn svg{width:20px;height:20px;flex-shrink:0;}
+  .submit-btn[disabled]{
+    background:#A9BCCB;
+    cursor:not-allowed;
+  }
+  .submit-note{
+    text-align:center;
+    font-size:13px;
+    color:#5A7185;
+    margin-top:12px;
+  }
+
+  .error-msg{
+    display:none;
+    background:#FDEDEA;
+    color:#B23A2C;
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13.5px;
+    font-weight:600;
+    margin-bottom:16px;
+  }
+  .error-msg.show{display:block;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center;
+    padding:26px 20px 44px;
+    font-size:12.5px;
+    color:#7590A3;
+  }
+  footer a{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2"/><path d="M12 9v11M8 13l4-2 4 2M6 20h12"/></svg>
+    Beach Buddy — Rabat
+  </div>
+  <h1>Besoin d'aide pour accéder à la plage ?</h1>
+  <p class="sub">Un assistant de plage volontaire vient vous aider, en quelques minutes, gratuitement.</p>
+  <p class="sub-ar arabic">خاصك مساعدة باش توصل للبحر؟ مساعد غادي يجي يعاونك فدقايق.</p>
+  <a href="#demande">
+    <button class="hero-cta">
+      Demander de l'aide
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </a>
+  <div class="wave">
+    <svg viewBox="0 0 500 60" preserveAspectRatio="none"><path d="M0,30 C120,60 200,0 320,20 C400,34 460,10 500,20 L500,60 L0,60 Z" fill="#EAF4F8"/></svg>
+  </div>
+</div>
+
+<div class="steps">
+  <div class="steps-grid">
+    <div class="step-card"><div class="step-num">1</div><p>Choisissez votre plage et votre besoin</p></div>
+    <div class="step-card"><div class="step-num">2</div><p>Envoyez votre demande</p></div>
+    <div class="step-card"><div class="step-num">3</div><p>Un assistant vous rejoint</p></div>
+  </div>
+</div>
+
+<div class="wrap" id="demande">
+  <h2 class="section-title">Faire une demande</h2>
+  <p class="section-hint">Remplissez ces trois questions, un assistant sera prévenu directement sur WhatsApp.</p>
+
+  <div class="error-msg" id="errorMsg">Merci de répondre aux trois questions avant d'envoyer votre demande.</div>
+
+  <div class="field">
+    <label for="plage">Quelle plage ?</label>
+    <div class="label-ar arabic">شحال من شاطئ؟</div>
+    <select id="plage">
+      <option value="" selected disabled>Sélectionnez une plage</option>
+      <option value="rabat">Plage de Rabat (Océan)</option>
+      <option value="skhirat" disabled>Skhirate — bientôt disponible</option>
+      <option value="temara" disabled>Témara — bientôt disponible</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="position">Où êtes-vous ?</label>
+    <div class="label-ar arabic">فين راك دابا؟</div>
+    <select id="position">
+      <option value="" selected disabled>Sélectionnez votre position</option>
+      <option value="Entrée principale">Entrée principale</option>
+      <option value="Entrée 2">Entrée 2</option>
+      <option value="Parking">Parking</option>
+      <option value="Autre">Autre endroit</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>De quoi avez-vous besoin ?</label>
+    <div class="label-ar arabic">شنو خاصك؟</div>
+    <div class="choice-grid">
+      <label class="choice">
+        <input type="radio" name="besoin" value="Traverser le sable">
+        <span class="box"><span class="icon">🏖️</span>Traverser le sable</span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="besoin" value="Atteindre l'eau">
+        <span class="box"><span class="icon">🌊</span>Atteindre l'eau</span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="besoin" value="Retourner à l'entrée">
+        <span class="box"><span class="icon">↩️</span>Retourner à l'entrée</span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="besoin" value="Autre besoin">
+        <span class="box"><span class="icon">🤝</span>Autre besoin</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="field" id="autreField" style="display:none;">
+    <label for="autreTexte">Précisez votre besoin</label>
+    <textarea id="autreTexte" placeholder="Décrivez brièvement ce dont vous avez besoin..."></textarea>
+  </div>
+
+  <div class="field">
+    <label for="telephone">Votre numéro de téléphone</label>
+    <div class="label-ar arabic">رقم التيليفون ديالك</div>
+    <input type="tel" id="telephone" inputmode="tel" placeholder="06 12 34 56 78" autocomplete="tel"
+      style="width:100%;padding:15px 14px;border-radius:14px;border:1.5px solid var(--line);font-size:16px;color:var(--ink);">
+  </div>
+
+  <button class="submit-btn" id="submitBtn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 003.6 17.3L2 22l4.9-1.6A11 11 0 1020.5 3.5zM12 20.2a8.2 8.2 0 01-4.2-1.1l-.3-.2-3.1 1 1-3-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.9 1-.3.2-.6.1a6.6 6.6 0 01-2-1.2 7.4 7.4 0 01-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.5a1.8 1.8 0 00.2-.4.4.4 0 000-.4c-.1-.1-.6-1.4-.8-1.9s-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 12 12 0 004.6 4.1c.6.3 1.1.4 1.5.6a3.6 3.6 0 001.7.1 2.8 2.8 0 001.8-1.3 2.3 2.3 0 00.2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+    Envoyer ma demande sur WhatsApp
+  </button>
+  <p class="submit-note">Le message s'ouvre dans WhatsApp, pré-rempli — il ne reste qu'à l'envoyer.</p>
+</div>
+
+<footer>
+  Projet étudiant — accessibilité des plages à Rabat.<br>
+  Question ou envie de devenir assistant partenaire ? <a href="mailto:beachbuddy.rabat@gmail.com">beachbuddy.rabat@gmail.com</a>
+</footer>
+
+<script>
+  // Numéro d'un assistant WhatsApp par plage ET par type de besoin.
+  // Objectif : répartir les demandes entre plusieurs assistants plutôt que
+  // de faire reposer tout le service sur une seule personne.
+  // -> Remplacez ces numéros placeholder par les vrais numéros des assistants partenaires.
+  const ASSISTANTS = {
+    rabat: {
+      "Traverser le sable":      "212600000001", // Assistant 1
+      "Atteindre l'eau":         "212600000002", // Assistant 2
+      "Retourner à l'entrée":    "212600000001", // Assistant 1
+      "Autre besoin":            "212600000002"  // Assistant 2 (par défaut)
+    }
+  };
+
+  const plageSelect = document.getElementById('plage');
+  const positionSelect = document.getElementById('position');
+  const besoinRadios = document.querySelectorAll('input[name="besoin"]');
+  const autreField = document.getElementById('autreField');
+  const autreTexte = document.getElementById('autreTexte');
+  const telephoneInput = document.getElementById('telephone');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  besoinRadios.forEach(r => r.addEventListener('change', () => {
+    autreField.style.display = (r.value === 'Autre besoin' && r.checked) ? 'block' : autreField.style.display;
+    if (r.checked && r.value !== 'Autre besoin') autreField.style.display = 'none';
+  }));
+
+  function isValidPhone(v){
+    const digits = v.replace(/[\s.\-]/g, '');
+    return /^(0|\+212|00212)[5-7]\d{8}$/.test(digits);
+  }
+
+  submitBtn.addEventListener('click', () => {
+    const plage = plageSelect.value;
+    const plageLabel = plageSelect.options[plageSelect.selectedIndex] ? plageSelect.options[plageSelect.selectedIndex].text : '';
+    const position = positionSelect.value;
+    const besoinChecked = document.querySelector('input[name="besoin"]:checked');
+    const besoin = besoinChecked ? besoinChecked.value : '';
+    const detail = (besoin === 'Autre besoin') ? autreTexte.value.trim() : '';
+    const telephone = telephoneInput.value.trim();
+
+    const manque = !plage || !position || !besoin
+      || (besoin === 'Autre besoin' && !detail)
+      || !telephone || !isValidPhone(telephone);
+
+    if (manque) {
+      errorMsg.textContent = !telephone || !isValidPhone(telephone)
+        ? "Merci d'indiquer un numéro de téléphone marocain valide, en plus des trois questions."
+        : "Merci de répondre aux questions avant d'envoyer votre demande.";
+      errorMsg.classList.add('show');
+      errorMsg.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    errorMsg.classList.remove('show');
+
+    // Routage : chaque besoin est envoyé à un assistant différent, pour répartir
+    // la charge entre plusieurs personnes plutôt qu'une seule.
+    const phone = (ASSISTANTS[plage] && ASSISTANTS[plage][besoin]) || '';
+
+    let message = `Bonjour, je suis à ${plageLabel} et j'ai besoin d'aide.%0A`;
+    message += `📍 Position : ${position}%0A`;
+    message += `🙋 Besoin : ${besoin}`;
+    if (detail) message += ` (${detail})`;
+    message += `%0A📞 Contact : ${telephone}`;
+
+    if (phone) {
+      window.location.href = `https://wa.me/${phone}?text=${message}`;
+    } else {
+      window.location.href = `https://wa.me/?text=${message}`;
+    }
+  });
+</script>
+
+</body>
+</html>
